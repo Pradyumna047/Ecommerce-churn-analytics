@@ -243,7 +243,11 @@ python src/export_for_powerbi.py
 
 **Pradyumna Shetty**  
 Master's Student — Information and Electrical Engineering, Hochschule Wismar  
+<<<<<<< HEAD
 Former Data Engineer — Accenture Solutions (3.7 years)  
+=======
+Former Data Engineer — Accenture Solutions (3.9 years)  
+>>>>>>> fd3d763d5b8934fe2f8fbba8c8add248382ebf19
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?logo=linkedin)](https://linkedin.com/in/pradyumna-shetty-534a14132)
 [![GitHub](https://img.shields.io/badge/GitHub-Follow-black?logo=github)](https://github.com/Pradyumna047)
@@ -252,4 +256,8 @@ Former Data Engineer — Accenture Solutions (3.7 years)
 
 ## 📄 License
 
+<<<<<<< HEAD
 This project is licensed under the MIT License.
+=======
+This project is licensed under the MIT License.
+>>>>>>> fd3d763d5b8934fe2f8fbba8c8add248382ebf19
