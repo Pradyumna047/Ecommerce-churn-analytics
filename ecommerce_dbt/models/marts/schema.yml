@@ -1,0 +1,39 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: "Enriched customer dimension table with engineered features and segments"
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+      - name: customer_segment
+        tests:
+          - accepted_values:
+              values: ['High Value', 'Mid Value', 'Low Value']
+      - name: return_rate
+        tests:
+          - not_null
+      - name: engagement_score
+        tests:
+          - not_null
+
+  - name: fct_churn
+    description: "Fact table joining customer profiles with ML churn predictions"
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+      - name: actual_churn
+        tests:
+          - accepted_values:
+              values: [0, 1]
+      - name: priority_flag
+        tests:
+          - accepted_values:
+              values: ['URGENT', 'AT RISK', 'STABLE']
+      - name: revenue_at_risk
+        tests:
+          - not_null

@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: agg_churn_by_country
+    description: "Churn rates and revenue at risk aggregated by country"
+    columns:
+      - name: country
+        tests:
+          - unique
+          - not_null
+      - name: churn_rate_pct
+        tests:
+          - not_null
+
+  - name: agg_churn_by_category
+    description: "Churn rates aggregated by product category"
+    columns:
+      - name: preferred_category
+        tests:
+          - unique
+          - not_null
+
+  - name: agg_churn_by_segment
+    description: "Churn and revenue at risk by customer segment and priority"
+    columns:
+      - name: customer_segment
+        tests:
+          - not_null

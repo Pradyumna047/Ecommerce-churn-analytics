@@ -1,0 +1,43 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: "Cleaned and standardised customer data from raw CSV source"
+    columns:
+      - name: customer_id
+        description: "Unique customer identifier"
+        tests:
+          - unique
+          - not_null
+      - name: churn
+        description: "Churn flag: 1 = churned, 0 = retained"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0, 1]
+      - name: age
+        description: "Customer age in years"
+        tests:
+          - not_null
+      - name: total_spend
+        description: "Total historical spend in EUR"
+        tests:
+          - not_null
+
+  - name: stg_predictions
+    description: "ML model predictions with confidence bands"
+    columns:
+      - name: customer_id
+        description: "Unique customer identifier"
+        tests:
+          - unique
+          - not_null
+      - name: churn_probability
+        description: "Model predicted probability of churn (0-1)"
+        tests:
+          - not_null
+      - name: churn_risk_segment
+        description: "Risk category assigned by model"
+        tests:
+          - accepted_values:
+              values: ['Low Risk', 'Medium Risk', 'High Risk']

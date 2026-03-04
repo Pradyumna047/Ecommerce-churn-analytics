@@ -1,0 +1,68 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# PyCharm
+.idea/
+*.iml
+
+# dbt
+ecommerce_dbt/target/
+ecommerce_dbt/dbt_packages/
+ecommerce_dbt/logs/
+ecommerce_dbt/.user.yml
+
+# DuckDB — exclude the database file itself (too large)
+*.duckdb
+*.duckdb.wal
+
+# Delta tables — exclude actual data files (too large)
+delta_tables/
+
+# Power BI cache
+.pbi/
+
+# Large data files — keep CSVs under 100MB only
+data/powerbi_exports/
+# Keep seed CSVs but exclude large generated ones if needed
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment variables
+.env
+*.env
+```
+
+---
+
+## STEP 4 — Screenshot Your Dashboard
+
+Before writing the README you need screenshots. Take one screenshot per Power BI page:
+
+- Open Power BI → go to each page
+- Press `Windows + Shift + S` → select the full canvas area
+- Save each to:
+```
+outputs/dashboard/page1_executive_summary.png
+outputs/dashboard/page2_customer_segments.png
+outputs/dashboard/page3_product_payment.png
+outputs/dashboard/page4_ml_performance.png
+outputs/dashboard/page5_customer_behaviour.png
+outputs/dashboard/page6_retention_actions.png
