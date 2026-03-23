@@ -2,13 +2,12 @@ import pandas as pd
 import numpy as np
 import os
 
-# Reproducibility
 np.random.seed(42)
 N = 5000  # number of customers
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 os.makedirs(DATA_DIR, exist_ok=True)
-# ── Generate raw features ────────────────────────────────────────────────────
+
 customer_ids = [f"CUST_{str(i).zfill(5)}" for i in range(1, N + 1)]
 
 age                  = np.random.randint(18, 70, N)
@@ -34,12 +33,7 @@ payment_method       = np.random.choice(
 device_type          = np.random.choice(
     ["Mobile", "Desktop", "Tablet"], N, p=[0.55, 0.35, 0.10])
 
-# ── Churn logic (realistic rules) ───────────────────────────────────────────
-# Higher churn probability if:
-#   - long time since last order
-#   - many returns or complaints
-#   - low total spend
-#   - short tenure
+
 
 churn_score = (
       0.03 * days_since_last_order
@@ -50,11 +44,11 @@ churn_score = (
     + np.random.normal(0, 2, N)   # noise
 )
 
-# Normalise to 0-1 probability
+
 churn_prob = 1 / (1 + np.exp(-0.15 * (churn_score - 5)))
 churn      = (churn_prob > 0.5).astype(int)
 
-# ── Assemble DataFrame ───────────────────────────────────────────────────────
+
 df = pd.DataFrame({
     "customer_id"           : customer_ids,
     "age"                   : age,
@@ -75,12 +69,9 @@ df = pd.DataFrame({
     "churn"                 : churn
 })
 
-# ── Save ─────────────────────────────────────────────────────────────────────
-#os.makedirs("data", exist_ok=True)
-#df.to_csv("data/ecommerce_customers.csv", index=False)
 
 df.to_csv(os.path.join(DATA_DIR, "ecommerce_customers.csv"), index=False)
 
-print(f"✅ Dataset saved: {len(df)} rows, {df.shape[1]} columns")
+print(f" Dataset saved: {len(df)} rows, {df.shape[1]} columns")
 print(f"   Churn rate: {df['churn'].mean():.1%}")
 print(df.head())

@@ -3,20 +3,15 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 
-# ── Always resolve paths relative to project root ────────────────────────────
 BASE_DIR    = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR    = os.path.join(BASE_DIR, "data")
 OUTPUTS_DIR = os.path.join(BASE_DIR, "outputs")
 os.makedirs(DATA_DIR, exist_ok=True)
 os.makedirs(OUTPUTS_DIR, exist_ok=True)
 
-# ── Load data ─────────────────────────────────────────────────────────────────
 csv_path = os.path.join(DATA_DIR, "ecommerce_customers.csv")
 df = pd.read_csv(csv_path)
 
-# FIX: Create a string label column for churn.
-# Newer seaborn (0.13+) requires palette keys to match the ACTUAL values
-# in the column — not integers. Using a string column avoids all palette errors.
 df["churn_label"] = df["churn"].map({0: "Retained", 1: "Churned"})
 
 sns.set_theme(style="whitegrid", palette="muted")
@@ -31,7 +26,7 @@ print(f"\nData types:\n{df.dtypes}")
 print(f"\nNumerical summary:")
 print(df.describe().round(2))
 
-# ── Plot 1: Churn Distribution ────────────────────────────────────────────────
+
 fig, ax = plt.subplots(figsize=(6, 4))
 counts = df["churn"].value_counts().sort_index()
 labels = ["Retained (0)", "Churned (1)"]
@@ -51,8 +46,8 @@ plt.savefig(os.path.join(OUTPUTS_DIR, "01_churn_distribution.png"), dpi=150)
 plt.close()
 print("Saved: 01_churn_distribution.png")
 
-# ── Plot 2: Churn Rate by Country ─────────────────────────────────────────────
-# FIX: use set_xticks() BEFORE set_xticklabels() to avoid FixedLocator warning
+
+
 churn_by_country = (df.groupby("country")["churn"]
                       .mean()
                       .sort_values(ascending=False))
@@ -73,8 +68,7 @@ plt.savefig(os.path.join(OUTPUTS_DIR, "02_churn_by_country.png"), dpi=150)
 plt.close()
 print("Saved: 02_churn_by_country.png")
 
-# ── Plot 3: Days Since Last Order — Churned vs Retained ───────────────────────
-# FIX: use hue="churn_label" with string palette keys
+
 fig, ax = plt.subplots(figsize=(8, 4))
 sns.histplot(data=df, x="days_since_last_order", hue="churn_label",
              bins=40,
@@ -89,7 +83,7 @@ plt.savefig(os.path.join(OUTPUTS_DIR, "03_days_since_order.png"), dpi=150)
 plt.close()
 print("Saved: 03_days_since_order.png")
 
-# ── Plot 4: Correlation Heatmap ───────────────────────────────────────────────
+
 numeric_cols = ["age", "tenure_months", "num_orders", "avg_order_value",
                 "total_spend", "days_since_last_order",
                 "num_returns", "num_complaints",
@@ -106,8 +100,7 @@ plt.savefig(os.path.join(OUTPUTS_DIR, "04_correlation_heatmap.png"), dpi=150)
 plt.close()
 print("Saved: 04_correlation_heatmap.png")
 
-# ── Plot 5: Total Spend by Churn ──────────────────────────────────────────────
-# FIX: pass hue= explicitly and set legend=False to silence FutureWarning
+
 fig, ax = plt.subplots(figsize=(8, 4))
 sns.boxplot(data=df, x="churn_label", y="total_spend",
             hue="churn_label",
@@ -121,8 +114,8 @@ plt.savefig(os.path.join(OUTPUTS_DIR, "05_spend_by_churn.png"), dpi=150)
 plt.close()
 print("Saved: 05_spend_by_churn.png")
 
-# ── Plot 6: Churn Rate by Product Category ────────────────────────────────────
-# FIX: same set_xticks() before set_xticklabels() pattern
+
+
 churn_by_cat = (df.groupby("preferred_category")["churn"]
                   .mean()
                   .sort_values(ascending=False))
@@ -143,7 +136,7 @@ plt.savefig(os.path.join(OUTPUTS_DIR, "06_churn_by_category.png"), dpi=150)
 plt.close()
 print("Saved: 06_churn_by_category.png")
 
-# ── Plot 7: Churn Rate by Payment Method ──────────────────────────────────────
+
 churn_by_pay = (df.groupby("payment_method")["churn"]
                   .mean()
                   .sort_values(ascending=False))
@@ -164,8 +157,8 @@ plt.savefig(os.path.join(OUTPUTS_DIR, "07_churn_by_payment.png"), dpi=150)
 plt.close()
 print("Saved: 07_churn_by_payment.png")
 
-# ── Plot 8: Tenure by Churn — Violin Plot ─────────────────────────────────────
-# FIX: hue= + legend=False pattern same as boxplot fix
+
+
 fig, ax = plt.subplots(figsize=(8, 4))
 sns.violinplot(data=df, x="churn_label", y="tenure_months",
                hue="churn_label",

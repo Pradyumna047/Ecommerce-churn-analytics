@@ -10,31 +10,31 @@ from sklearn.metrics import (classification_report, roc_auc_score,
                               roc_curve, ConfusionMatrixDisplay)
 import os
 
-# ── Always resolve paths relative to project root ────────────────────────────
+
 BASE_DIR    = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR    = os.path.join(BASE_DIR, "data")
 OUTPUTS_DIR = os.path.join(BASE_DIR, "outputs")
 os.makedirs(DATA_DIR, exist_ok=True)
 os.makedirs(OUTPUTS_DIR, exist_ok=True)
 
-# ── Load ──────────────────────────────────────────────────────────────────────
+
 df = pd.read_csv(os.path.join(DATA_DIR, "ecommerce_customers.csv"))
 print(f"Loaded: {df.shape[0]} rows, {df.shape[1]} columns")
 
-# ── Feature Engineering ───────────────────────────────────────────────────────
+
 df["return_rate"]     = df["num_returns"]    / (df["num_orders"]             + 1)
 df["complaint_rate"]  = df["num_complaints"] / (df["tenure_months"]          + 1)
 df["spend_per_order"] = df["total_spend"]    / (df["num_orders"]             + 1)
 df["recency_score"]   = 1                    / (df["days_since_last_order"]  + 1)
 
-# ── Encode Categoricals ───────────────────────────────────────────────────────
+
 cat_cols = ["gender", "country", "preferred_category",
             "payment_method", "device_type"]
 le = LabelEncoder()
 for col in cat_cols:
     df[col] = le.fit_transform(df[col])
 
-# ── Features & Target ─────────────────────────────────────────────────────────
+
 feature_cols = [
     "age", "gender", "country", "tenure_months", "num_orders",
     "avg_order_value", "total_spend", "days_since_last_order",
@@ -46,7 +46,7 @@ feature_cols = [
 X = df[feature_cols]
 y = df["churn"]
 
-# ── Split & Scale ─────────────────────────────────────────────────────────────
+
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42, stratify=y)
 scaler     = StandardScaler()
@@ -55,7 +55,7 @@ X_test_sc  = scaler.transform(X_test)
 
 print(f"Train: {X_train.shape[0]} | Test: {X_test.shape[0]}")
 
-# ── Train 3 Models ────────────────────────────────────────────────────────────
+
 models = {
     "Logistic Regression" : LogisticRegression(max_iter=1000, random_state=42),
     "Random Forest"       : RandomForestClassifier(n_estimators=100,
@@ -86,7 +86,7 @@ best_name = max(results, key=lambda k: results[k]["auc"])
 best      = results[best_name]
 print(f"\nBest model: {best_name}  (AUC = {best['auc']:.4f})")
 
-# ── Plot 1: ROC Curves ────────────────────────────────────────────────────────
+
 fig, ax = plt.subplots(figsize=(8, 6))
 colors = ["#2E75B6", "#E05C5C", "#2CA02C"]
 for (name, res), color in zip(results.items(), colors):
@@ -103,7 +103,7 @@ plt.savefig(os.path.join(OUTPUTS_DIR, "09_roc_curves.png"), dpi=150)
 plt.close()
 print("Saved: 09_roc_curves.png")
 
-# ── Plot 2: Confusion Matrix ──────────────────────────────────────────────────
+
 fig, ax = plt.subplots(figsize=(6, 5))
 ConfusionMatrixDisplay.from_predictions(
     y_test, best["y_pred"],
@@ -115,7 +115,7 @@ plt.savefig(os.path.join(OUTPUTS_DIR, "10_confusion_matrix.png"), dpi=150)
 plt.close()
 print("Saved: 10_confusion_matrix.png")
 
-# ── Plot 3: Feature Importance ────────────────────────────────────────────────
+
 rf_model    = results["Random Forest"]["model"]
 importances = pd.Series(rf_model.feature_importances_,
                          index=feature_cols).sort_values(ascending=True)
@@ -130,7 +130,7 @@ plt.savefig(os.path.join(OUTPUTS_DIR, "11_feature_importance.png"), dpi=150)
 plt.close()
 print("Saved: 11_feature_importance.png")
 
-# ── Plot 4: Model Comparison ──────────────────────────────────────────────────
+
 model_names = list(results.keys())
 auc_scores  = [results[n]["auc"]    for n in model_names]
 cv_scores   = [results[n]["cv_auc"] for n in model_names]
@@ -159,7 +159,7 @@ plt.savefig(os.path.join(OUTPUTS_DIR, "12_model_comparison.png"), dpi=150)
 plt.close()
 print("Saved: 12_model_comparison.png")
 
-# ── Save Predictions (for Databricks + Power BI) ─────────────────────────────
+
 X_test_copy = X_test.copy()
 X_test_copy["customer_id"]        = df.loc[X_test.index, "customer_id"].values
 X_test_copy["actual_churn"]       = y_test.values
@@ -172,7 +172,7 @@ X_test_copy["churn_risk_segment"] = pd.cut(
 )
 X_test_copy.to_csv(os.path.join(DATA_DIR, "model_predictions.csv"), index=False)
 
-# ── Save full decoded dataset for Power BI ────────────────────────────────────
+
 cat_mapping = {
     "gender"            : {0: "Female",       1: "Male"},
     "country"           : {0: "Austria",      1: "France",       2: "Germany",

@@ -1,23 +1,23 @@
 import duckdb
 import os
 
-# ── Paths ─────────────────────────────────────────────────────────────────────
+
 BASE_DIR   = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DBT_DB     = os.path.join(BASE_DIR, "ecommerce_dbt", "ecommerce.duckdb")
 EXPORT_DIR = os.path.join(BASE_DIR, "data", "powerbi_exports")
 os.makedirs(EXPORT_DIR, exist_ok=True)
 
-# ── Connect to DuckDB ─────────────────────────────────────────────────────────
+
 print(f"Connecting to: {DBT_DB}")
 con = duckdb.connect(DBT_DB)
 
-# ── List available tables ─────────────────────────────────────────────────────
+
 print("\nAvailable tables:")
 tables = con.execute("SHOW TABLES").fetchall()
 for t in tables:
     print(f"  {t[0]}")
 
-# ── Export each dbt model to CSV ──────────────────────────────────────────────
+
 exports = [
     ("fct_churn",              "fct_churn.csv"),
     ("dim_customers",          "dim_customers.csv"),
