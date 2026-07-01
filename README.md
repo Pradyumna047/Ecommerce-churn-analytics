@@ -242,8 +242,8 @@ python src/export_for_powerbi.py
 ## 👤 Author
 
 **Pradyumna Shetty**  
-Master's Student — Information and Electrical Engineering, Hochschule Wismar  
-Former Data Engineer — Accenture Solutions (3.9 years)  
+Master's Student: Information and Electrical Engineering, Hochschule Wismar  
+Former Data Engineer: Accenture Solutions (3.9 years)  
 
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?logo=linkedin)](https://linkedin.com/in/pradyumna-shetty-534a14132)
